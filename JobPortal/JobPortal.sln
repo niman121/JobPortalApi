@@ -1,0 +1,43 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.4.33205.214
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JobPortal", "JobPortal.csproj", "{BB4E5206-3F9E-4641-BCC2-E6DCB67441FB}"
+	ProjectSection(ProjectDependencies) = postProject
+		{AC4CEF75-89DC-4D2B-83CE-68D47787D798} = {AC4CEF75-89DC-4D2B-83CE-68D47787D798}
+	EndProjectSection
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JobPortal.Data", "..\JobPortal.Data\JobPortal.Data.csproj", "{268AC6F9-6FA6-446B-AF7C-CA43B80E6731}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JobPortal.Service", "..\JobPortal.Service\JobPortal.Service.csproj", "{AC4CEF75-89DC-4D2B-83CE-68D47787D798}"
+	ProjectSection(ProjectDependencies) = postProject
+		{268AC6F9-6FA6-446B-AF7C-CA43B80E6731} = {268AC6F9-6FA6-446B-AF7C-CA43B80E6731}
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{BB4E5206-3F9E-4641-BCC2-E6DCB67441FB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BB4E5206-3F9E-4641-BCC2-E6DCB67441FB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BB4E5206-3F9E-4641-BCC2-E6DCB67441FB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BB4E5206-3F9E-4641-BCC2-E6DCB67441FB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{268AC6F9-6FA6-446B-AF7C-CA43B80E6731}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{268AC6F9-6FA6-446B-AF7C-CA43B80E6731}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{268AC6F9-6FA6-446B-AF7C-CA43B80E6731}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{268AC6F9-6FA6-446B-AF7C-CA43B80E6731}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AC4CEF75-89DC-4D2B-83CE-68D47787D798}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AC4CEF75-89DC-4D2B-83CE-68D47787D798}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AC4CEF75-89DC-4D2B-83CE-68D47787D798}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AC4CEF75-89DC-4D2B-83CE-68D47787D798}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {B2868891-C156-4B5E-821D-24D7B8233586}
+	EndGlobalSection
+EndGlobal
