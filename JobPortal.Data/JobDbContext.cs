@@ -8,18 +8,17 @@ namespace JobPortal.Data
 {
     public class JobDbContext : DbContext
     {
-        public JobDbContext(DbContextOptions options) : base(options)
+        public JobDbContext(DbContextOptions<JobDbContext> options) : base(options)
         {
 
         }
-        DbSet<User> Users { get; set; } 
-        DbSet<Recruiter> Recruiters { get; set;}
-        DbSet<Admin> Admins { get; set; }   
-        DbSet<Candidate> Candidates { get; set; }
-        DbSet<Job> Jobs { get; set;}
-        DbSet<UserRoleMapping> RoleMappings { get; set; }
-        DbSet<Role> Roles { get; set; }
-
+        public DbSet<User> Users { get; set; } 
+        public DbSet<Recruiter> Recruiters { get; set;}
+        public DbSet<Admin> Admins { get; set; }   
+        public DbSet<Candidate> Candidates { get; set; }
+        public DbSet<Job> Jobs { get; set;}
+        public DbSet<UserRoleMapping> RoleMappings { get; set; }
+        public DbSet<Role> Roles { get; set; }
 
     }
 }
