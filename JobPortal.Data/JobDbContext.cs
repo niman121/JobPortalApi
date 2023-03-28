@@ -16,6 +16,10 @@ namespace JobPortal.Data
         DbSet<Recruiter> Recruiters { get; set;}
         DbSet<Admin> Admins { get; set; }   
         DbSet<Candidate> Candidates { get; set; }
+        DbSet<Job> Jobs { get; set;}
+        DbSet<UserRoleMapping> RoleMappings { get; set; }
+        DbSet<Role> Roles { get; set; }
+
 
     }
 }

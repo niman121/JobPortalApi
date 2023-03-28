@@ -7,5 +7,6 @@ namespace JobPortal.Controllers
     [ApiController]
     public class RecruiterController : ControllerBase
     {
+        
     }
 }
