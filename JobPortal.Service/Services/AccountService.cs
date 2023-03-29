@@ -29,26 +29,20 @@ namespace JobPortal.Service.Services
             throw new NotImplementedException();
         }
 
-        public async Task<bool> RegisterUser(SignUpDto dto)
+        public async Task<bool> RegisterUserAsync(SignUpDto dto)
         {
-            int rowSaved = 0;
-            var exists = await IsEmailExistAsync(dto.EmailAddress);
-            if (!exists)
-            {
-                var hashedPassword = PasswordHashManager.CreateHash(dto.Password);
-                var user = new User();
-                user.CreatedDate = DateTime.Now;
-                user.Email = dto.EmailAddress;
-                user.ModifiedDate = null;
-                user.Name = dto.EmailAddress;
-                user.Password = hashedPassword;
-                await _context.Users.AddAsync(user);
-                rowSaved = await _context.SaveChangesAsync();
-            }
-            else
-            {
-                return false;
-            }
+            var hashedPassword = PasswordHashManager.CreateHash(dto.Password);
+            var user = new User();
+
+            user.CreatedDate = DateTime.Now;
+            user.Email = dto.EmailAddress;
+            user.ModifiedDate = null;
+            user.Name = dto.EmailAddress;
+            user.Password = hashedPassword;
+
+            await _context.Users.AddAsync(user);
+            var rowSaved = await _context.SaveChangesAsync();
+
             if (rowSaved > 0) return true;
             return false;
         }

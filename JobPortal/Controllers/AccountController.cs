@@ -1,62 +1,79 @@
 ﻿using JobPortal.Data.Models;
 using JobPortal.Service.Dtos;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using PasswordHashTool;
+using JobPortal.Service.Services;
+using System.Net.Http;
+using JobPortal.Service;
+using Microsoft.AspNetCore.Authorization;
+using System.Web.Http;
+using AuthorizeAttribute = Microsoft.AspNetCore.Authorization.AuthorizeAttribute;
+using AllowAnonymousAttribute = Microsoft.AspNetCore.Authorization.AllowAnonymousAttribute;
 
 namespace JobPortal.Controllers
 {
-    [Route("account")]
-    [ApiController]
-    public class AccountController : ControllerBase
+    [RoutePrefix("account")]
+    [Authorize]
+    public class AccountController : ApiController
     {
-        public AccountController()
-        {
+        private readonly IAccountService _accountService;
 
-        }
-        [Route("sign-up")]
-        [HttpGet]
-        public ActionResult SignUp()
+        public AccountController(IAccountService accountService)
         {
-            var model = new SignUpDto();
-            return Ok(model);
+            _accountService = accountService;
         }
 
         [Route("sign-up")]
         [HttpPost]
-        public ActionResult SignUp(SignUpDto dto)
+        [ValidateModel]
+        [AllowAnonymous]
+        public async Task<ServiceResult> SignUp(SignUpDto dto)
         {
-            if (ModelState.IsValid)
+            var result = new ServiceResult();
+            var emailExists = await _accountService.IsEmailExistAsync(dto.EmailAddress);
+            if (!emailExists)
             {
-                
-                return Ok();
+                var isSignedUp = await _accountService.RegisterUserAsync(dto);
+                if (isSignedUp)
+                    result.SetSuccess();
+                else
+                    result.SetFailure("User Registeration Failed");
             }
-            return ValidationProblem();
+            else
+                result.SetFailure("Email Already Exists");
+            return result;
         }
 
         [Route("login")]
         [HttpPost]
-        public ActionResult login(SignUpDto dto)
+        [ValidateModel]
+        [AllowAnonymous]
+        public ServiceResult login(SignUpDto dto)
         {
-            return Ok();
+            var result = new ServiceResult();
+
+            return result;
         }
 
         [Route("resetpassword")]
         [HttpGet]
-        public ActionResult PasswordReset()
+        [AllowAnonymous]
+        public ServiceResult PasswordReset()
         {
-            return Ok();
+            var result = new ServiceResult();
+            return result;
         }
 
         [Route("forgotpassword")]
         [HttpGet]
-        public ActionResult ForgotPassword()
+        [AllowAnonymous]
+        public ServiceResult ForgotPassword()
         {
-            return Ok();
+            var result = new ServiceResult();
+            return result;
         }
     }
 }

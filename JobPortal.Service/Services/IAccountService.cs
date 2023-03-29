@@ -6,11 +6,12 @@ using System.Threading.Tasks;
 
 namespace JobPortal.Service.Services
 {
-    interface IAccountService
+    public interface IAccountService
     {
-        Task<bool> RegisterUser(SignUpDto dto);
+        Task<bool> RegisterUserAsync(SignUpDto dto);
         Task<bool> AuthenticateUser(SignUpDto dto);
         Task<bool> Logout(int userId);
         Task<bool> ResetPassword(ResetPasswordDto dto);
+        Task<bool> IsEmailExistAsync(string email);
     }
 }
