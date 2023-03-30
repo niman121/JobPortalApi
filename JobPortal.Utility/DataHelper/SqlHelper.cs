@@ -2,9 +2,10 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace JobPortal.Service
+namespace JobPortal.Utility
 {
-    public class DataProvider
+    public class SqlHelper
     {
+
     }
 }

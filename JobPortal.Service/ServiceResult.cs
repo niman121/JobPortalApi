@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace JobPortal.Service
@@ -8,7 +9,7 @@ namespace JobPortal.Service
     {
         public int Status { get; set; }
         public string Message { get; set; }
-        public List<string> Errors { get; set; }
+        public List<Error> Errors { get; set; }
         public T Data { get; set; }
 
         public ServiceResult()
@@ -51,13 +52,22 @@ namespace JobPortal.Service
             Status = 422;
             Message = "Invalid Model";
         }
-        public void AddError(string error)
+        public void AddError(string error, string propertyName)
         {
             if (Errors == null)
             {
-                Errors = new List<string>();
+                Errors = new List<Error>();
             }
-            Errors.Add(error);
+            else
+            {
+                var errorString = new string[] { error };
+                var model = new Error()
+                {
+                    ErrorMessages = errorString,
+                    PropertyName = propertyName
+                };
+                Errors.Add(model);
+            }
         }
         public bool IsSuccess()
         {
@@ -72,5 +82,11 @@ namespace JobPortal.Service
             Message = "No Records";
             Data = true;
         }
+    }
+
+    public class Error
+    {
+        public string PropertyName { get; set; }
+        public string[] ErrorMessages { get; set; }
     }
 }

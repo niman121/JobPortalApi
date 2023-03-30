@@ -1,4 +1,5 @@
-﻿using System;
+﻿using JobPortal.Service;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -9,7 +10,7 @@ using System.Web.Http.Controllers;
 using System.Web.Http.Filters;
 using System.Web.Http.ModelBinding;
 
-namespace JobPortal.Service
+namespace JobPortal.Utility
 {
     public class ValidateModelAttribute : ActionFilterAttribute
     {

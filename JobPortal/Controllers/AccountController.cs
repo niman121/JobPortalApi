@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Authorization;
 using System.Web.Http;
 using AuthorizeAttribute = Microsoft.AspNetCore.Authorization.AuthorizeAttribute;
 using AllowAnonymousAttribute = Microsoft.AspNetCore.Authorization.AllowAnonymousAttribute;
+using JobPortal.Utility;
 
 namespace JobPortal.Controllers
 {
