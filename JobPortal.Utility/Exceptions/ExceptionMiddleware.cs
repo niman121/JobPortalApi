@@ -7,6 +7,7 @@ using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -20,23 +21,14 @@ namespace JobPortal.Utility
 {
     public class ExceptionMiddleware
     {
-        private readonly ILogger _logger;
-        private readonly IHttpContextAccessor _httpContext;
         private readonly RequestDelegate _request;
-        private readonly JobDbContext _context;
 
-        public ExceptionMiddleware(ILogger<ExceptionMiddleware> logger,
-                                   IHttpContextAccessor httpContext,
-                                   RequestDelegate request,
-                                   JobDbContext context)
+        public ExceptionMiddleware(RequestDelegate request)
         {
-            _logger = logger;
-            _httpContext = httpContext;
             _request = request;
-            _context = context;
         }
 
-        public async Task InvokeAsync(HttpContext context)
+        public async Task InvokeAsync(HttpContext context, JobDbContext dbContext)
         {
             try
             {
@@ -44,21 +36,24 @@ namespace JobPortal.Utility
             }
             catch (Exception ex)
             {
-                await LogExceptionToDbAsync(context, ex);
+                await LogExceptionToDbAsync(context, ex,dbContext);
+                await HandleExceptionAsync(context, ex);
             }
         } 
         private async Task HandleExceptionAsync(HttpContext context, Exception ex)
         {
             context.Response.ContentType= "application/json";
             var exceptionData = GetExceptionDetail(ex);
+            context.Response.StatusCode = (int)exceptionData.Status;
+            await context.Response.WriteAsync(JsonConvert.SerializeObject(exceptionData));
         }
 
-        private async Task<ServiceResult<string>> GetExceptionDetail(Exception ex)
+        private ServiceResult<string> GetExceptionDetail(Exception ex)
         {
-            var model = await GetErrorResponseAsync(ex);
+            var model = GetErrorResponse(ex);
 
             var execptionType = ex.GetType();
-            var value = await GetValueByExceptionType(execptionType);
+            var value = GetValueByExceptionType(execptionType);
 
             switch (value)
             {
@@ -80,18 +75,8 @@ namespace JobPortal.Utility
             }
             return model;
         }
-        private async Task LogExceptionToDbAsync(HttpContext context, Exception ex)
+        private async Task LogExceptionToDbAsync(HttpContext context, Exception ex, JobDbContext _context)
         {
-            //var exMessageParameter = DataProvider.GetStringSqlParameter("@Message",ex.Message.ToString());
-            //var exTypeParameter = DataProvider.GetStringSqlParameter("@Type",ex.GetType().ToString());
-            //var exSourceParameter = DataProvider.GetStringSqlParameter("@Source",ex.StackTrace.ToString());
-            //var exUrlParameter = DataProvider.GetStringSqlParameter("@Url",context.Request?.Path.Value.ToString());
-
-            //var sqlParameters = new List<SqlParameter>()
-            //{
-            //    exMessageParameter, exTypeParameter, exSourceParameter, exUrlParameter
-            //};
-
             var execptionLog = new ExceptionLog()
             {
                 Message = ex.Message,
@@ -103,7 +88,7 @@ namespace JobPortal.Utility
             await _context.SaveChangesAsync();
         }
 
-        private async Task<ServiceResult<string>> GetErrorResponseAsync(Exception ex)
+        private ServiceResult<string> GetErrorResponse(Exception ex)
         {
             var result = new ServiceResult<string>();
             var errorMessage = new string[1];
@@ -121,17 +106,17 @@ namespace JobPortal.Utility
             return result;
         }
 
-        private async Task<int> GetValueByExceptionType(Type exceptionType)
+        private int GetValueByExceptionType(Type exceptionType)
         {
             var errorCode = new Dictionary<Type, int>()
             {
                 { typeof(DuplicateRecordException),1},
                 { typeof(RecordNotFoundException), 2},
-                {typeof(BadRequestException), 3},
+                { typeof(BadRequestException), 3},
                 { typeof(ValidationException), 4},
                 { typeof(NullReferenceException), 5}
             };
-
+            
             return errorCode.Where(q => q.Key == exceptionType).Select(q => q.Value).FirstOrDefault();
         }
     }

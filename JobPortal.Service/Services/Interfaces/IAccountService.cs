@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace JobPortal.Service.Services
+namespace JobPortal.Service.Services.Interfaces
 {
     public interface IAccountService
     {

@@ -5,20 +5,22 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using JobPortal.Service.Services;
 using System.Net.Http;
 using JobPortal.Service;
 using Microsoft.AspNetCore.Authorization;
-using System.Web.Http;
 using AuthorizeAttribute = Microsoft.AspNetCore.Authorization.AuthorizeAttribute;
 using AllowAnonymousAttribute = Microsoft.AspNetCore.Authorization.AllowAnonymousAttribute;
 using JobPortal.Utility;
+using Microsoft.AspNetCore.Mvc;
+using JobPortal.Utility.Exceptions;
+using JobPortal.Service.Services.Interfaces;
 
 namespace JobPortal.Controllers
 {
-    [RoutePrefix("account")]
+    [System.Web.Http.RoutePrefix("account")]
     [Authorize]
-    public class AccountController : ApiController
+    [ApiController]
+    public class AccountController : ControllerBase
     {
         private readonly IAccountService _accountService;
 

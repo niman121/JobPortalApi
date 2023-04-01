@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using PasswordHashTool;
+using JobPortal.Service.Services.Interfaces;
 
 namespace JobPortal.Service.Services
 {
