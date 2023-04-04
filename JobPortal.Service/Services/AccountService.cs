@@ -20,9 +20,9 @@ namespace JobPortal.Service.Services
         {
             _context = jobDbContext;
         }
-        public Task<bool> AuthenticateUser(SignUpDto dto)
+        public Task<bool> UserExists(SignUpDto dto)
         {
-            throw new NotImplementedException();
+            var user = 
         }
 
         public Task<bool> Logout(int userId)

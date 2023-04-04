@@ -27,15 +27,15 @@ namespace JobPortal.ApiHelper
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));
             var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
-            var tokenCred = new JwtSecurityToken(
+            var tokenCredential = new JwtSecurityToken(
                 issuer: _configuration["Jwt:Issuer"],
-                audience: _configuration["JWt:Issuer"],
+                audience: _configuration["Jwt:Audience"],
                 expires: DateTime.Now.AddMinutes(1),
                 signingCredentials: credentials
                 );
 
             var tokenHandler = new JwtSecurityTokenHandler();
-            return tokenHandler.WriteToken(tokenCred);
+            return tokenHandler.WriteToken(tokenCredential);
         }
     }
 }

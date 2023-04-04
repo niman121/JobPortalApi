@@ -32,7 +32,6 @@ namespace JobPortal.Utility
 
                 actionContext.Response = actionContext.Request.CreateResponse(HttpStatusCode.OK, result);
             }
-            base.OnActionExecuting(actionContext);
         }
     }
 }

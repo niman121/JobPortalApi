@@ -57,7 +57,7 @@ namespace JobPortal.Controllers
         public ServiceResult login(SignUpDto dto)
         {
             var result = new ServiceResult();
-
+            var userExists = 
             return result;
         }
 

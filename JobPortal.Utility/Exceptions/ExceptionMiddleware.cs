@@ -36,7 +36,7 @@ namespace JobPortal.Utility
             }
             catch (Exception ex)
             {
-                await LogExceptionToDbAsync(context, ex,dbContext);
+                await LogExceptionToDbAsync(context, ex, dbContext);
                 await HandleExceptionAsync(context, ex);
             }
         } 
