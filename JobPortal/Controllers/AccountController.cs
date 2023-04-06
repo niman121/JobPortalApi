@@ -14,6 +14,7 @@ using JobPortal.Utility;
 using Microsoft.AspNetCore.Mvc;
 using JobPortal.Utility.Exceptions;
 using JobPortal.Service.Services.Interfaces;
+using PasswordHashTool;
 
 namespace JobPortal.Controllers
 {
@@ -57,7 +58,6 @@ namespace JobPortal.Controllers
         public ServiceResult login(SignUpDto dto)
         {
             var result = new ServiceResult();
-            var userExists = 
             return result;
         }
 

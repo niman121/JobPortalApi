@@ -20,11 +20,6 @@ namespace JobPortal.Service.Services
         {
             _context = jobDbContext;
         }
-        public Task<bool> UserExists(SignUpDto dto)
-        {
-            var user = 
-        }
-
         public Task<bool> Logout(int userId)
         {
             throw new NotImplementedException();
@@ -57,5 +52,10 @@ namespace JobPortal.Service.Services
         {
             return await _context.Users.AnyAsync(q => q.Email == email);
         }
+
+        //public async Task<bool> ValidateUser(SignUpDto dto)
+        //{
+        //    await _context.Users.SingleOrDefaultAsync(q => q.Email == dto.EmailAddress)
+        //}
     }
 }
