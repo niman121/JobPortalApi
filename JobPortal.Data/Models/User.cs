@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Reflection.Metadata.Ecma335;
 using System.Text;
 
 namespace JobPortal.Data.Models
@@ -14,5 +15,7 @@ namespace JobPortal.Data.Models
         public string Password { get; set; }
         public DateTime CreatedDate { get; set; }
         public Nullable<DateTime> ModifiedDate { get; set;}
+
+        public List<Role> Roles { get; set; }
     }
 }

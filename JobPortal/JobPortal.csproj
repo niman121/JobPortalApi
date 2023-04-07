@@ -28,5 +28,9 @@
     <ProjectReference Include="..\JobPortal.Utility\JobPortal.Utility.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="ApiHelper\" />
+  </ItemGroup>
+
 
 </Project>

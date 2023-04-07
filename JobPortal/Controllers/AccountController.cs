@@ -15,6 +15,7 @@ using Microsoft.AspNetCore.Mvc;
 using JobPortal.Utility.Exceptions;
 using JobPortal.Service.Services.Interfaces;
 using PasswordHashTool;
+using JobPortal.ApiHelper;
 
 namespace JobPortal.Controllers
 {
@@ -55,9 +56,11 @@ namespace JobPortal.Controllers
         [HttpPost]
         [ValidateModel]
         [AllowAnonymous]
-        public ServiceResult login(SignUpDto dto)
+        public async Task<ServiceResult> login(SignUpDto dto)
         {
             var result = new ServiceResult();
+            var authenticUser = await _accountService.AuthenticateUser(dto);
+            
             return result;
         }
 

@@ -7,11 +7,10 @@ using System.Text;
 
 namespace JobPortal.ApiHelper
 {
-    public class jwtHelper
+    public class JwtHelper : IJwtHelper
     {
         private readonly IConfiguration _configuration;
-
-        public jwtHelper(IConfiguration configuration)
+        public JwtHelper(IConfiguration configuration)
         {
             _configuration = configuration;
         }

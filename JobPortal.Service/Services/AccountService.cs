@@ -9,16 +9,21 @@ using System.Text;
 using System.Threading.Tasks;
 using PasswordHashTool;
 using JobPortal.Service.Services.Interfaces;
+using JobPortal.Data.Repositories.Interfaces;
+using JobPortal.ApiHelper;
 
 namespace JobPortal.Service.Services
 {
     public class AccountService : IAccountService
     {
-        private readonly JobDbContext _context;
+        private readonly IUnitOfWork _unitOfWork;
+        private readonly IJwtHelper _jwtHelper;
 
-        public AccountService(JobDbContext jobDbContext)
+        public AccountService(IUnitOfWork unitOfWork
+                             ,IJwtHelper jwtHelper)
         {
-            _context = jobDbContext;
+            _unitOfWork = unitOfWork;
+            _jwtHelper = jwtHelper;
         }
         public Task<bool> Logout(int userId)
         {
@@ -36,9 +41,8 @@ namespace JobPortal.Service.Services
             user.Name = dto.EmailAddress;
             user.Password = hashedPassword;
 
-            await _context.Users.AddAsync(user);
-            var rowSaved = await _context.SaveChangesAsync();
-
+            await _unitOfWork.UserRepository.AddAsync(user);
+            var rowSaved = await _unitOfWork.CommitAsync();
             if (rowSaved > 0) return true;
             return false;
         }
@@ -50,12 +54,21 @@ namespace JobPortal.Service.Services
 
         public async Task<bool> IsEmailExistAsync(string email)
         {
-            return await _context.Users.AnyAsync(q => q.Email == email);
+            return await _unitOfWork.UserRepository.AnyAsync(q => q.Email == email);
         }
 
-        //public async Task<bool> ValidateUser(SignUpDto dto)
-        //{
-        //    await _context.Users.SingleOrDefaultAsync(q => q.Email == dto.EmailAddress)
-        //}
+        public async Task<string> AuthenticateUser(SignUpDto dto)
+        {
+            string token = string.Empty;
+            var user  = await _unitOfWork.UserRepository.GetFirstOrDefaultAsync(q => q.Email == dto.EmailAddress,true);
+            var correctPassword = user.Password;
+            
+            var validPassword = PasswordHashManager.ValidatePassword(dto.Password, correctPassword);
+            if (validPassword)
+            {
+                token = _jwtHelper.GenerateToken(user.Name, "Admin", user.Email);
+            }
+            return token;
+        }
     }
 }

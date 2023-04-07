@@ -1,6 +1,9 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using JobPortal.Data.Repositories.Interfaces;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -40,6 +43,30 @@ namespace JobPortal.Data.Repositories
         public void Update(T entity)
         {
             _jobDbContext.Entry(entity).State = EntityState.Modified;
+        }
+
+        public async Task<T> GetByIdAsync(int id)
+        {
+            return await _jobDbContext.Set<T>().FindAsync(id);
+        }
+
+        public async Task<bool> AnyAsync(Expression<Func<T,bool>> predicate)
+        {
+            return await _jobDbContext.Set<T>().AnyAsync(predicate);
+        }
+        public virtual IQueryable<T> Query(bool eager = false)
+        {
+            var query = _jobDbContext.Set<T>().AsQueryable();
+            if (eager)
+            {
+                foreach (var property in _jobDbContext.Model.FindEntityType(typeof(T)).GetNavigations())
+                    query = query.Include(property.Name);
+            }
+            return query;
+        }
+        public async Task<T> GetFirstOrDefaultAsync(Expression<Func<T,bool>> predicate, bool eager = false)
+        {
+            return await Query(eager).FirstOrDefaultAsync(predicate);
         }
     }
 }

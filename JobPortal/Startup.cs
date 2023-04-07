@@ -20,6 +20,9 @@ using JobPortal.Service.Services.Interfaces;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using JobPortal.Data.Repositories.Interfaces;
+using JobPortal.Data.Repositories;
+using JobPortal.ApiHelper;
 
 namespace JobPortal
 {
@@ -42,7 +45,9 @@ namespace JobPortal
                 options.SwaggerDoc("v1", new OpenApiInfo { Title = "Job Portal Api", Version = "v1" });
             });
             services.AddScoped<IAccountService,AccountService>();
-
+            services.AddScoped<IUnitOfWork,UnitOfWork>();
+            services.AddScoped<IJobPortalUserRepository, JobPortalUserRepository>();
+            services.AddScoped<IJwtHelper, JwtHelper>();
             services.AddAuthentication(options =>
             {
                 options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
