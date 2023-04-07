@@ -56,11 +56,11 @@ namespace JobPortal.Controllers
         [HttpPost]
         [ValidateModel]
         [AllowAnonymous]
-        public async Task<ServiceResult> login(SignUpDto dto)
+        public async Task<ServiceResult<string>> login(SignUpDto dto)
         {
-            var result = new ServiceResult();
+            var result = new ServiceResult<string>();
             var authenticUser = await _accountService.AuthenticateUser(dto);
-            
+            result.Data = authenticUser;
             return result;
         }
 

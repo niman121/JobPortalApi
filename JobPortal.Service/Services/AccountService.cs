@@ -62,11 +62,11 @@ namespace JobPortal.Service.Services
             string token = string.Empty;
             var user  = await _unitOfWork.UserRepository.GetFirstOrDefaultAsync(q => q.Email == dto.EmailAddress,true);
             var correctPassword = user.Password;
-            
+            var roles = user.Roles.ToList().Select(q => q.Name).ToArray();
             var validPassword = PasswordHashManager.ValidatePassword(dto.Password, correctPassword);
             if (validPassword)
             {
-                token = _jwtHelper.GenerateToken(user.Name, "Admin", user.Email);
+                token = _jwtHelper.GenerateToken(user.Name, roles, user.Email);
             }
             return token;
         }
