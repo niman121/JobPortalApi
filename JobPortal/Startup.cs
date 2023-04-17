@@ -23,6 +23,7 @@ using System.Text;
 using JobPortal.Data.Repositories.Interfaces;
 using JobPortal.Data.Repositories;
 using JobPortal.ApiHelper;
+using JobPortal.Service.AppSettings;
 
 namespace JobPortal
 {
@@ -36,7 +37,7 @@ namespace JobPortal
         public IConfiguration Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
-        public void ConfigureServices(IServiceCollection services)
+        public void ConfigureServices(IServiceCollection services, IConfiguration configuration)
         {
             services.AddControllers();
             services.AddDbContext<JobDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("jobPortalDbConnection")));
@@ -44,10 +45,20 @@ namespace JobPortal
             {
                 options.SwaggerDoc("v1", new OpenApiInfo { Title = "Job Portal Api", Version = "v1" });
             });
+
+            //adding dependencies and repository in DI Container
             services.AddScoped<IAccountService,AccountService>();
             services.AddScoped<IUnitOfWork,UnitOfWork>();
-            services.AddScoped<IJobPortalUserRepository, JobPortalUserRepository>();
             services.AddScoped<IJwtHelper, JwtHelper>();
+            services.AddScoped<ICandidateService ,CandidateService>();
+            services.AddScoped<IAdminService, AdminService>();
+            services.AddScoped<IRecruiterService, RecruiterService>();
+            services.AddScoped<IJobPortalUserRepository, JobPortalUserRepository>();
+            services.AddScoped<IJobPortalCandidateRepository, JobPortalCandidateRepository>();
+            services.AddScoped<IJobPortalAdminRepository, JobPortalAdminRepository>();
+            services.AddScoped<IJobPortalJobRepository, JobPortalJobRepository>();
+            services.AddScoped<IJobPortalRecruiterRepository, JobPortalRecruiterRepository>();
+
             services.AddAuthentication(options =>
             {
                 options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -66,6 +77,8 @@ namespace JobPortal
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Jwt:Key"]))
                 };
             });
+
+            services.Configure<MailSettings>(configuration.GetSection("MailSettings")).Configure<JwtSettings>(configuration.GetSection("Jwt"));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -7,7 +7,8 @@ namespace JobPortal.Service.Dtos
 {
     public class ResetPasswordDto
     {
-        public int UserId { get; set; }
+        public int Otp { get; set; }
+        public string Email { get; set; }
 
         [DataType(DataType.Password, ErrorMessage = "Invalid Password")]
         [Required]

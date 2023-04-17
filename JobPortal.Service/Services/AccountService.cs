@@ -18,14 +18,17 @@ namespace JobPortal.Service.Services
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IJwtHelper _jwtHelper;
+        private readonly IOtpService _otpService;
 
         public AccountService(IUnitOfWork unitOfWork
-                             ,IJwtHelper jwtHelper)
+                             ,IJwtHelper jwtHelper
+                             ,IOtpService otpService)
         {
             _unitOfWork = unitOfWork;
             _jwtHelper = jwtHelper;
+            _otpService = otpService;
         }
-        public Task<bool> Logout(int userId)
+        public Task<bool> LogoutAsync(int userId)
         {
             throw new NotImplementedException();
         }
@@ -47,9 +50,24 @@ namespace JobPortal.Service.Services
             return false;
         }
 
-        public Task<bool> ResetPassword(ResetPasswordDto dto)
+        public async Task<bool> ResetPasswordAsync(ResetPasswordDto dto)
         {
-            throw new NotImplementedException();
+            bool status = false;
+            var validOtp = await _otpService.ValidateOtpAsync(dto.Otp, dto.Email);
+            if (validOtp)
+            {
+                var newPassword = PasswordHashManager.CreateHash(dto.Password);
+                var user = await _unitOfWork.UserRepository.GetFirstOrDefaultAsync(q => q.Email == dto.Email);
+                if (user != null)
+                {
+                    user.Password = newPassword;
+                    _unitOfWork.UserRepository.Update(user);
+                    var rowSaved = await _unitOfWork.CommitAsync();
+                    if(rowSaved > 0) 
+                        status = true;
+                }
+            }
+            return status;
         }
 
         public async Task<bool> IsEmailExistAsync(string email)
@@ -57,7 +75,7 @@ namespace JobPortal.Service.Services
             return await _unitOfWork.UserRepository.AnyAsync(q => q.Email == email);
         }
 
-        public async Task<string> AuthenticateUser(SignUpDto dto)
+        public async Task<string> AuthenticateUserAsync(SignUpDto dto)
         {
             string token = string.Empty;
             var user  = await _unitOfWork.UserRepository.GetFirstOrDefaultAsync(q => q.Email == dto.EmailAddress,true);

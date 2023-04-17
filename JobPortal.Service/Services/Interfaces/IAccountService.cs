@@ -9,9 +9,9 @@ namespace JobPortal.Service.Services.Interfaces
     public interface IAccountService
     {
         Task<bool> RegisterUserAsync(SignUpDto dto);
-        Task<string> AuthenticateUser(SignUpDto dto);
-        Task<bool> Logout(int userId);
-        Task<bool> ResetPassword(ResetPasswordDto dto);
+        Task<string> AuthenticateUserAsync(SignUpDto dto);
+        Task<bool> LogoutAsync(int userId);
+        Task<bool> ResetPasswordAsync(ResetPasswordDto dto);
         Task<bool> IsEmailExistAsync(string email);
 
     }

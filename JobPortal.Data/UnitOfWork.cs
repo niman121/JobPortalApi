@@ -11,12 +11,27 @@ namespace JobPortal.Data
     {
         private readonly JobDbContext _context;
         public IJobPortalUserRepository UserRepository { get; }
-        
+        public IJobPortalOtpRepository OtpRepository { get; }
+        public IJobPortalJobRepository JobRepository { get; }
+        public IJobPortalCandidateRepository CandidateRepository { get; }   
+        public IJobPortalAdminRepository AdminRepository { get; }   
+        public IJobPortalRecruiterRepository RecruiterRepository { get; }
+
         public UnitOfWork(JobDbContext jobDbContext
-                         ,IJobPortalUserRepository userRepository)
+                         , IJobPortalUserRepository userRepository
+                         , IJobPortalOtpRepository otpRepository
+                         , IJobPortalJobRepository jobRepository
+                         , IJobPortalRecruiterRepository recruiterRepository
+                         , IJobPortalAdminRepository adminRepository
+                         , IJobPortalCandidateRepository candidateRepository)
         {
             _context = jobDbContext;
             UserRepository = userRepository;
+            OtpRepository = otpRepository;
+            JobRepository = jobRepository;  
+            RecruiterRepository = recruiterRepository;
+            AdminRepository = adminRepository;
+            CandidateRepository = candidateRepository;
         }
 
         public async Task<int> CommitAsync()

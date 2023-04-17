@@ -19,5 +19,6 @@ namespace JobPortal.Data
         public DbSet<Job> Jobs { get; set;}
         public DbSet<Role> Roles { get; set; }
         public DbSet<ExceptionLog> ExceptionLogs { get; set; }
+        public DbSet<JobPortalOtp> JobPortalOtps { get; set; }
     }
 }
