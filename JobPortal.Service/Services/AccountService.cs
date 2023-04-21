@@ -11,6 +11,7 @@ using PasswordHashTool;
 using JobPortal.Service.Services.Interfaces;
 using JobPortal.Data.Repositories.Interfaces;
 using JobPortal.ApiHelper;
+using Microsoft.AspNetCore.Http;
 
 namespace JobPortal.Service.Services
 {
@@ -87,6 +88,17 @@ namespace JobPortal.Service.Services
                 token = _jwtHelper.GenerateToken(user.Name, roles, user.Email);
             }
             return token;
+        }
+
+        public async Task<User> GetUser(HttpContext context)
+        {
+            var user = new User();
+            var userName = context.User.Identity.Name;
+            if (!String.IsNullOrEmpty(userName))
+            {
+                user = await _unitOfWork.UserRepository.GetFirstOrDefaultAsync(q => q.Email == userName, true);
+            }
+            return user;
         }
     }
 }

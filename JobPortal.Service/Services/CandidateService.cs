@@ -23,8 +23,10 @@ namespace JobPortal.Service.Services
         }
         public async Task<List<JobDTO>> AppliedJobs(int candidateId)
         {
+            var joblist = new List<JobDTO>();
             var candidate = await _unitOfWork.CandidateRepository.GetByIdAsync(candidateId);
-            var jobs = candidate.Jobs.Select(s => new JobDTO
+            var jobs =  await _unitOfWork.CandidateRepository.GetJobsByCandidateId(candidateId);
+            jobs.Select(s => new JobDTO
             {
                 JobId = s.Id,
                 Description = s.Description,
@@ -35,24 +37,23 @@ namespace JobPortal.Service.Services
                 Type = s.JobType
 
             });
-            return jobs.ToList();
+            return joblist;
         }
 
         public async Task<bool> ApplyToJobs(ApplyJobDTO jobs)
         {
             bool status = false;
-            var candidate = await _unitOfWork.CandidateRepository.GetFirstOrDefaultAsync(q => q.Id == jobs.CandidateId);
+            var candidate = await _unitOfWork.CandidateRepository.GetFirstOrDefaultAsync(q => q.Id == jobs.CandidateId, true);
             var candidateUser = candidate.User;
             if (candidate != null && jobs.JobIds.Count > 0)
             {
-                foreach (var id in jobs.JobIds)
-                {
-                    var job = await _unitOfWork.JobRepository.GetByIdAsync(id);
-                    candidate.Jobs.Add(job);
-                    var saved = await _unitOfWork.CommitAsync();
+                var candidateJob = await _unitOfWork.CandidateRepository.AddJobs(candidate.Id, jobs.JobIds);
 
-                    if (saved > 0)
+                if (candidateJob > 0)
+                {
+                    foreach (var id in jobs.JobIds)
                     {
+                        var job = await _unitOfWork.JobRepository.GetByIdAsync(id);
                         status = true;
                         var candidateMail = PrepareMailMessageForCandidate(job.Name, candidateUser.Email);
                         var recruiterMail = PrepareMailMessageForRecruiter(candidateUser.Name, job.Name, job.Recruiter.User.Email);
@@ -62,6 +63,7 @@ namespace JobPortal.Service.Services
                             _emailService.SendEmailAsync(recruiterMail);
                         });
                     }
+                    status = true;
                 }
             }
             return status;

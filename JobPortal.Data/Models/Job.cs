@@ -21,7 +21,6 @@ namespace JobPortal.Data.Models
         public string Location { get; set; }
         public int NumberOfOpenings { get; set; }
         public Recruiter Recruiter { get; set; }
-        public List<Candidate> Candidates { get; set; }
         public List<JobType> JobType { get; set; }
     }
 }

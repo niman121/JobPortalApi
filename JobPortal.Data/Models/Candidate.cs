@@ -10,7 +10,6 @@ namespace JobPortal.Data.Models
         [Key]
         public int Id { get; set; }
         public User User { get; set; }
-        public List<Job> Jobs { get; set; }
         public bool IsActive { get; set; }
 
     }

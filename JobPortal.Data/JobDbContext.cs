@@ -8,10 +8,12 @@ namespace JobPortal.Data
 {
     public class JobDbContext : DbContext
     {
+        
         public JobDbContext(DbContextOptions<JobDbContext> options) : base(options)
         {
 
         }
+       
         public DbSet<User> Users { get; set; } 
         public DbSet<Recruiter> Recruiters { get; set;}
         public DbSet<Admin> Admins { get; set; }   
@@ -20,5 +22,14 @@ namespace JobPortal.Data
         public DbSet<Role> Roles { get; set; }
         public DbSet<ExceptionLog> ExceptionLogs { get; set; }
         public DbSet<JobPortalOtp> JobPortalOtps { get; set; }
+        public DbSet<CandidateJob> CandidateJob { get; set; }
+
+
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<CandidateJob>()
+                .HasKey(cj => new { cj.CandidateId, cj.JobId });
+        }
     }
 }

@@ -37,7 +37,7 @@ namespace JobPortal
         public IConfiguration Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
-        public void ConfigureServices(IServiceCollection services, IConfiguration configuration)
+        public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
             services.AddDbContext<JobDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("jobPortalDbConnection")));
@@ -47,10 +47,10 @@ namespace JobPortal
             });
 
             //adding dependencies and repository in DI Container
-            services.AddScoped<IAccountService,AccountService>();
-            services.AddScoped<IUnitOfWork,UnitOfWork>();
+            services.AddScoped<IAccountService, AccountService>();
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped<IJwtHelper, JwtHelper>();
-            services.AddScoped<ICandidateService ,CandidateService>();
+            services.AddScoped<ICandidateService, CandidateService>();
             services.AddScoped<IAdminService, AdminService>();
             services.AddScoped<IRecruiterService, RecruiterService>();
             services.AddScoped<IJobPortalUserRepository, JobPortalUserRepository>();
@@ -58,6 +58,9 @@ namespace JobPortal
             services.AddScoped<IJobPortalAdminRepository, JobPortalAdminRepository>();
             services.AddScoped<IJobPortalJobRepository, JobPortalJobRepository>();
             services.AddScoped<IJobPortalRecruiterRepository, JobPortalRecruiterRepository>();
+            services.AddScoped<IJobPortalOtpRepository, JobPortalOtpRepository>();
+            services.AddScoped<IOtpService, OptService>();
+            services.AddScoped<IEmailService, EmailService>();
 
             services.AddAuthentication(options =>
             {
@@ -78,7 +81,7 @@ namespace JobPortal
                 };
             });
 
-            services.Configure<MailSettings>(configuration.GetSection("MailSettings")).Configure<JwtSettings>(configuration.GetSection("Jwt"));
+            services.Configure<MailSettings>(Configuration.GetSection("MailSettings")).Configure<JwtSettings>(Configuration.GetSection("Jwt"));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

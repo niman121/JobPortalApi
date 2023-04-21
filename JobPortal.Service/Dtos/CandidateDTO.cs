@@ -6,5 +6,6 @@ namespace JobPortal.Service.Dtos
 {
     public class CandidateDTO
     {
+
     }
 }
