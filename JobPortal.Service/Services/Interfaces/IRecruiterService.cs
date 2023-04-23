@@ -9,7 +9,7 @@ namespace JobPortal.Service.Services.Interfaces
     public interface IRecruiterService
     {
         Task<bool> AddNewJob(AddNewJobDTO job);
-        IEnumerable<CandidateJobDTO> SeeCandidateList(int recruiterId,int from,int to);
-        //Task<CandidateJobDTO> GetCandidateBasedOnJob(int jobId);
+        Task<IEnumerable<CandidateJobDTO>> SeeCandidateList(int recruiterId,int from,int to);
+        Task<CandidateJobDTO> GetCandidateBasedOnJob(int jobId);
     }
 }

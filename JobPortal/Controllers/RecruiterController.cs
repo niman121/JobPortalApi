@@ -46,10 +46,10 @@ namespace JobPortal.Controllers
 
         [HttpGet]
         [Route("SeeCandidateListAppliedToAllMyJobs")]
-        public ServiceResult<IEnumerable<CandidateJobDTO>> SeeCandidatesAppliedToJobs(int recruiterId, int from,int to)
+        public async Task<ServiceResult<IEnumerable<CandidateJobDTO>>> SeeCandidatesAppliedToJobs(int recruiterId, int from,int to)
         {
             var result = new ServiceResult<IEnumerable<CandidateJobDTO>>();
-            var candidateList = _recruiterService.SeeCandidateList(recruiterId,from,to);
+            var candidateList = await _recruiterService.SeeCandidateList(recruiterId,from,to);
             if(candidateList != null)
             {
                 result.SetSuccess(candidateList);
@@ -57,11 +57,17 @@ namespace JobPortal.Controllers
             return result;
         }
 
-        //[HttpGet]
-        //[Route("GetCandidatesOfJob")]
-        //public ServiceResult<IEnumerable<CandidateJobDTO>> GetJobWithCandidate(int jobId)
-        //{
-
-        //}
-     }
+        [HttpGet]
+        [Route("GetCandidatesOfJob")]
+        public async Task<ServiceResult<CandidateJobDTO>> GetJobWithCandidate(int jobId)
+        {
+            var result = new ServiceResult<CandidateJobDTO>();
+            var candidateJob = await _recruiterService.GetCandidateBasedOnJob(jobId);
+            if(candidateJob != null)
+            {
+                result.SetSuccess(candidateJob);
+            }
+            return result;
+        }
+    }
 }

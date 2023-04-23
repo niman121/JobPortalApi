@@ -53,12 +53,18 @@ namespace JobPortal.Controllers
             return result;
         }
 
-        //[Route("appliedjobs")]
-        //[HttpGet]
-        //public async Task<ServiceResult<List<JobDTO>>> AppliedJobs(int userId)
-        //{
-        //    var jobs = new List<JobDTO>();
-        //    return jobs;
-        //}
+        [Route("appliedjobs")]
+        [HttpGet]
+        public async Task<ServiceResult<List<JobDTO>>> appliedjobs(int candidateId)
+        {
+            var result = new ServiceResult<List<JobDTO>>();
+            var jobs = await _candidateService.AppliedJobs(candidateId);
+            if (jobs != null)
+            {
+                result.SetSuccess();
+                result.Data = jobs;
+            }
+            return result;
+        }
     }
 }

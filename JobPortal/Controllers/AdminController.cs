@@ -1,5 +1,6 @@
 ﻿using JobPortal.Service;
 using JobPortal.Service.Dtos;
+using JobPortal.Service.Services.Interfaces;
 using JobPortal.Utility;
 using JobPortal.Utility.Exceptions;
 using Microsoft.AspNetCore.Http;
@@ -13,38 +14,71 @@ namespace JobPortal.Controllers
     [ApiController]
     public class AdminController : ControllerBase
     {
+        private readonly IAdminService _adminService;
 
-        //[HttpGet]
-        //[Route("GetAllCandidates")]
-        //public async Task<ServiceResult<List<CandidateDTO>>> GetAllCandidates()
-        //{
-        //    var candidates = new List<CandidateDTO>();
-        //    return candidates;
-        //}
+        public AdminController(IAdminService adminService)
+        {
+            _adminService = adminService;
+        }
 
-        //[HttpGet]
-        //[Route("GetAllRecruiters")]
-        //public async Task<ServiceResult<List<RecruitersDTO>>> GetAllRecruiters()
-        //{
-        //    var recruiters = new List<RecruitersDTO>();
-        //    return recruiters;
-        //}
+        [HttpGet]
+        [Route("GetAllCandidates")]
+        public async Task<ServiceResult<List<CandidateDTO>>> GetAllCandidates()
+        {
+            var result = new ServiceResult<List<CandidateDTO>>();
+            var candidates = new List<CandidateDTO>();
 
-        //[HttpGet]
-        //[Route("GetAllJobs")]
-        //public async Task<ServiceResult<List<JobDTO>>> GetAllRecruiters()
-        //{
-        //    var jobs = new List<JobDTO>();
-        //    return jobs;
-        //}
+            var activeOnlyCandidates = true;
+            candidates = await _adminService.GetAllCandidates(activeOnlyCandidates,0,100);
 
-        //[HttpGet]
-        //[Route("GetCandidateJobDetails")]
-        //public async Task<ServiceResult<CandidateJobDTO>> GetAllCandidateWithAllJobs()
-        //{
-        //    var jobs = new List<CandidateJobDTO>();
-        //    return jobs;
-        //}
+            if (candidates.Count > 0)
+                result.SetSuccess(candidates);
+            else
+                result.SetFailure("could not load candidates");
+
+            return result;
+        }
+
+        [HttpGet]
+        [Route("GetAllRecruiters")]
+        public async Task<ServiceResult<List<RecruitersDTO>>> GetAllRecruiters()
+        {
+            var result = new ServiceResult<List<RecruitersDTO>>();
+            var recruiters = new List<RecruitersDTO>();
+
+            var activeOnlyRecruiters = true;
+            recruiters = await _adminService.GetAllRecruiters(activeOnlyRecruiters);
+            if (recruiters.Count > 0)
+                result.SetSuccess(recruiters);
+            else
+                result.SetFailure("could not load recruiters");
+            return result;
+        }
+
+        [HttpGet]
+        [Route("GetAllJobs")]
+        public async Task<ServiceResult<List<JobDTO>>> GetAllJobs()
+        {
+            var result = new ServiceResult<List<JobDTO>>();
+            var activeOnlyJobs = true;
+            
+            result.Data = await _adminService.GetAllJobs(activeOnlyJobs);
+            
+            if (result.Data.Count > 0)
+                result.SetSuccess();
+            else
+                result.SetFailure("could not load jobs");
+            
+            return result;
+        }
+
+        [HttpGet]
+        [Route("GetAllCandidateWithAllJobs")]
+        public async Task<ServiceResult<CandidateJobDTO>> GetAllCandidateWithAllJobs()
+        {
+            var jobs = new List<CandidateJobDTO>();
+            return jobs;
+        }
 
         //[HttpGet]
         //[Route("GetAllCandidateJobs")]

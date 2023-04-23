@@ -78,5 +78,18 @@ namespace JobPortal.Data.Repositories
 
             return orderBy != null ? (take == -1 ? orderBy(query) : orderBy(query).Skip(skip).Take(take)) : query;
         }
+
+        public IEnumerable<T> GetAll(Expression<Func<T, bool>> filter = null, Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null, bool eager = false,int skip = 0, int take = 10)
+        {
+            IQueryable<T> query = _jobDbContext.Set<T>();
+
+            if (eager)
+                query = Query(true);
+
+            if (filter != null)
+                query = query.Where(filter);
+
+            return orderBy != null ? (take == -1 ? orderBy(query) : orderBy(query).Skip(skip).Take(take)) : query;
+        }
     }
 }

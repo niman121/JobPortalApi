@@ -10,5 +10,7 @@ namespace JobPortal.Data.Repositories.Interfaces
     {
         Task<int> AddJobs(int candidateId, List<int> jobId);
         Task<List<Job>> GetJobsByCandidateId(int candidateId);
+        Task<List<Candidate>> GetCandidateBasedOnJobId(int jobId);
+        Task<List<Candidate>> GetAllCandidates(bool? onlyActiveCandidates, int skip, int take);
     }
 }
