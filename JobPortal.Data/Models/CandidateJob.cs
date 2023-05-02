@@ -16,5 +16,7 @@ namespace JobPortal.Data.Models
         public int JobId { get; set; }
         public Job Job { get; set; }
         public DateTime AppliedDate { get; set; }
+
+        public bool IsActive { get; set; }
     }
 }

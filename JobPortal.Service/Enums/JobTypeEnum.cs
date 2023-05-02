@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace JobPortal.Utility.Enums
+namespace JobPortal.Service.Enums
 {
     public class JobTypeEnum
     {

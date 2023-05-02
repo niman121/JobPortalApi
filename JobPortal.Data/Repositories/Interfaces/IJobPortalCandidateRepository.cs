@@ -12,5 +12,6 @@ namespace JobPortal.Data.Repositories.Interfaces
         Task<List<Job>> GetJobsByCandidateId(int candidateId);
         Task<List<Candidate>> GetCandidateBasedOnJobId(int jobId);
         Task<List<Candidate>> GetAllCandidates(bool? onlyActiveCandidates, int skip, int take);
+        Task DeActivateCandidate(int candidateId);
     }
 }

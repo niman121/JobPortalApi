@@ -12,6 +12,8 @@ using JobPortal.Service.Services.Interfaces;
 using JobPortal.Data.Repositories.Interfaces;
 using JobPortal.ApiHelper;
 using Microsoft.AspNetCore.Http;
+using JobPortal.Service.Enums;
+using System.ComponentModel.DataAnnotations;
 
 namespace JobPortal.Service.Services
 {
@@ -37,16 +39,24 @@ namespace JobPortal.Service.Services
         public async Task<bool> RegisterUserAsync(SignUpDto dto)
         {
             var hashedPassword = PasswordHashManager.CreateHash(dto.Password);
+            var role = await _unitOfWork.RoleRepository.GetFirstOrDefaultAsync(q => q.Name == RolesEnum.Candidate.ToString());
             var user = new User();
+            var candidate = new Candidate();
 
             user.CreatedDate = DateTime.Now;
             user.Email = dto.EmailAddress;
             user.ModifiedDate = null;
             user.Name = dto.EmailAddress;
             user.Password = hashedPassword;
+            user.Roles.Add(role); 
 
+            candidate.User = user;
+            candidate.IsActive = true;
+
+            await _unitOfWork.CandidateRepository.AddAsync(candidate);
             await _unitOfWork.UserRepository.AddAsync(user);
             var rowSaved = await _unitOfWork.CommitAsync();
+            
             if (rowSaved > 0) return true;
             return false;
         }

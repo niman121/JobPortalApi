@@ -15,6 +15,7 @@ namespace JobPortal.Data
         public IJobPortalCandidateRepository CandidateRepository { get; }
         public IJobPortalAdminRepository AdminRepository { get; }
         public IJobPortalRecruiterRepository RecruiterRepository { get; }
+        public IJobPortalRoleRepository RoleRepository { get; }
 
     }
 }

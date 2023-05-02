@@ -16,6 +16,7 @@ namespace JobPortal.Data
         public IJobPortalCandidateRepository CandidateRepository { get; }   
         public IJobPortalAdminRepository AdminRepository { get; }   
         public IJobPortalRecruiterRepository RecruiterRepository { get; }
+        public IJobPortalRoleRepository RoleRepository { get; }
 
         public UnitOfWork(JobDbContext jobDbContext
                          , IJobPortalUserRepository userRepository
@@ -23,7 +24,8 @@ namespace JobPortal.Data
                          , IJobPortalJobRepository jobRepository
                          , IJobPortalRecruiterRepository recruiterRepository
                          , IJobPortalAdminRepository adminRepository
-                         , IJobPortalCandidateRepository candidateRepository)
+                         , IJobPortalCandidateRepository candidateRepository
+                         , IJobPortalRoleRepository roleRepository)
         {
             _context = jobDbContext;
             UserRepository = userRepository;
@@ -32,6 +34,7 @@ namespace JobPortal.Data
             RecruiterRepository = recruiterRepository;
             AdminRepository = adminRepository;
             CandidateRepository = candidateRepository;
+            RoleRepository = roleRepository;
         }
 
         public async Task<int> CommitAsync()

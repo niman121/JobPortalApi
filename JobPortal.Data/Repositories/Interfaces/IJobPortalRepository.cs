@@ -19,6 +19,6 @@ namespace JobPortal.Data.Repositories.Interfaces
         Task<T> GetFirstOrDefaultAsync(Expression<Func<T, bool>> predicate, bool eager = false);
         IQueryable<T> Query(bool eager = false);
         IEnumerable<T> GetAll(Expression<Func<T, bool>> filter = null, Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null, int skip = 0, int take = 10);
-        IEnumerable<T> GetAll(Expression<Func<T, bool>> filter = null, Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null, bool eager = false, int skip = 0, int take = 10)
+        IEnumerable<T> GetAll(Expression<Func<T, bool>> filter = null, Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null, bool eager = false, int skip = 0, int take = 10);
     }
 }

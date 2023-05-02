@@ -53,7 +53,7 @@ namespace JobPortal.Data.Repositories
             var candidatesIds = await _context.CandidateJob.Where(q => q.JobId == jobId).ToListAsync();
             foreach (var id in candidatesIds)
             {
-                var candidate = await GetByIdAsync(id.CandidateId);
+                var candidate = await GetFirstOrDefaultAsync(q => q.Id == id.CandidateId, true);
                 result.Add(candidate);
             }
             return result;
@@ -69,6 +69,23 @@ namespace JobPortal.Data.Repositories
                 candidates = await _context.Candidates.Include(q => q.User).OrderByDescending(o => o.Id).Skip(skip).Take(take).ToListAsync();
 
             return candidates;
+        }
+
+        public async Task DeActivateCandidate(int candidateId)
+        {
+            var candidate = await GetByIdAsync(candidateId);
+
+            if (candidate != null)
+            {
+                candidate.IsActive = false;
+                _context.Entry(candidate).State = EntityState.Modified;
+                var jobMappings = await _context.CandidateJob.Where(q => q.CandidateId == candidateId).ToListAsync();
+                Parallel.ForEach(jobMappings, jm =>
+                {
+                    jm.IsActive = false;
+                    _context.Entry(jm).State = EntityState.Modified;
+                });
+            }
         }
     }
 }
