@@ -39,7 +39,7 @@ namespace JobPortal.Controllers
             return result;
         }
 
-        [Route("applyjobs")]
+        [Route("{candidateId}/job/applications")]
         [HttpPost]
         [ValidateModel]
         public async Task<ServiceResult> ApplyToJobs(ApplyJobDTO jobs)
