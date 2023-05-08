@@ -16,8 +16,8 @@ using RouteAttribute = System.Web.Http.RouteAttribute;
 
 namespace JobPortal.Controllers
 {
-    [RoutePrefix("Candidate")]
-    [Authorize(Roles = "Candidate")]
+    [RoutePrefix("candidate")]
+    [Authorize]
     [ApiController]
     public class CandidateController : ControllerBase
     {
@@ -30,6 +30,7 @@ namespace JobPortal.Controllers
 
         [Route("joblist")]
         [HttpGet]
+        [AllowAnonymous]
         public ServiceResult<IEnumerable<JobDTO>> GetJobLists(int from = 0, int to = 100)
         {
             var result = new ServiceResult<IEnumerable<JobDTO>>();
@@ -39,13 +40,13 @@ namespace JobPortal.Controllers
             return result;
         }
 
-        [Route("{candidateId}/job/applications")]
+        [Route("{candidateId}/jobs/{applicationIds}")]
         [HttpPost]
         [ValidateModel]
-        public async Task<ServiceResult> ApplyToJobs(ApplyJobDTO jobs)
+        public async Task<ServiceResult> ApplyToJobs(int candidateId, int[] applicationIds)
         {
             var result = new ServiceResult();
-            var applied = await _candidateService.ApplyToJobs(jobs);
+            var applied = await _candidateService.ApplyToJobs(candidateId,applicationIds);
             if (applied)
             {
                 result.SetSuccess();

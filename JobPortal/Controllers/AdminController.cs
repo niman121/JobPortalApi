@@ -5,6 +5,7 @@ using JobPortal.Service.Services;
 using JobPortal.Service.Services.Interfaces;
 using JobPortal.Utility;
 using JobPortal.Utility.Exceptions;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
@@ -15,8 +16,9 @@ using System.Threading.Tasks;
 
 namespace JobPortal.Controllers
 {
-    [System.Web.Http.RoutePrefix("Admin")]
     [ApiController]
+    [Route("[controller]")]
+    [Authorize(Roles = "Admin")]
     public class AdminController : ControllerBase
     {
         private readonly IAdminService _adminService;
@@ -29,7 +31,7 @@ namespace JobPortal.Controllers
         }
 
         [HttpGet]
-        [Route("GetAllCandidates")]
+        [Route("candidates")]
         public async Task<ServiceResult<List<CandidateDTO>>> GetAllCandidates()
         {
             var result = new ServiceResult<List<CandidateDTO>>();
@@ -47,7 +49,7 @@ namespace JobPortal.Controllers
         }
 
         [HttpGet]
-        [Route("GetAllRecruiters")]
+        [Route("recruiters")]
         public async Task<ServiceResult<List<RecruitersDTO>>> GetAllRecruiters()
         {
             var result = new ServiceResult<List<RecruitersDTO>>();
@@ -63,7 +65,7 @@ namespace JobPortal.Controllers
         }
 
         [HttpGet]
-        [Route("GetAllJobs")]
+        [Route("jobs")]
         public async Task<ServiceResult<List<JobDTO>>> GetAllJobs()
         {
             var result = new ServiceResult<List<JobDTO>>();
@@ -80,7 +82,7 @@ namespace JobPortal.Controllers
         }
 
         [HttpGet]
-        [Route("GetAllCandidateWithAllJobs")]
+        [Route("candidates/jobs")]
         public async Task<ServiceResult<List<CandidatesWithJobsDto>>> GetAllCandidateWithAllJobs()
         {
             var result = new ServiceResult<List<CandidatesWithJobsDto>>();
@@ -100,7 +102,7 @@ namespace JobPortal.Controllers
         }
 
         [HttpGet]
-        [Route("GetAllCandidateJobs")]
+        [Route("candidate/jobs")]
         public async Task<ServiceResult<CandidatesWithJobsDto>> GetCandidateWithAllJobs(int candidateId)
         {
             var result = new ServiceResult<CandidatesWithJobsDto>();
@@ -119,7 +121,7 @@ namespace JobPortal.Controllers
         }
 
         [HttpGet]
-        [Route("GetAllJobCandidates")]
+        [Route("job/candidates")]
         public async Task<ServiceResult<CandidateJobDTO>> GetJobWithAllCandidates(int jobId)
         {
             var result = new ServiceResult<CandidateJobDTO>();
@@ -203,7 +205,7 @@ namespace JobPortal.Controllers
         }
 
         [HttpPut]
-        [Route("updaterecruiter")]
+        [Route("UpdateRecruiter")]
         [ValidateModel]
         public async Task<ServiceResult> UpdateRecruiter(RecruitersDTO recruiter)
         {
@@ -222,7 +224,7 @@ namespace JobPortal.Controllers
         }
 
         [HttpGet]
-        [Route("ExportCandidateListToExcel")]
+        [Route("export/candidates")]
         public async Task<HttpResponseMessage> ExportAllCandidates()
         {
             var response = new HttpResponseMessage();   
@@ -235,7 +237,7 @@ namespace JobPortal.Controllers
         }
 
         [HttpGet]
-        [Route("ExportRcruiterList")]
+        [Route("export/rcruiter")]
         public async Task<HttpResponseMessage> ExportAllRecruiters()
         {
             var response = new HttpResponseMessage();
@@ -248,7 +250,7 @@ namespace JobPortal.Controllers
         }
 
         [HttpGet]
-        [Route("ExportCandidateWithAppliedJobsList")]
+        [Route("export/candidates/jobs")]
         public async Task<HttpResponseMessage> ExportCandidatesWithAppliedJobs()
         {
             var response = new HttpResponseMessage();

@@ -20,9 +20,9 @@ using System.CodeDom.Compiler;
 
 namespace JobPortal.Controllers
 {
-    [System.Web.Http.RoutePrefix("account")]
     [Authorize]
     [ApiController]
+    [Route("[controller]")]
     public class AccountController : ControllerBase
     {
         private readonly IAccountService _accountService;

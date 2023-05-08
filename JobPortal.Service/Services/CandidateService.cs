@@ -40,18 +40,18 @@ namespace JobPortal.Service.Services
             return joblist;
         }
 
-        public async Task<bool> ApplyToJobs(ApplyJobDTO jobs)
+        public async Task<bool> ApplyToJobs(int candidateId, int[] applicationIds)
         {
             bool status = false;
-            var candidate = await _unitOfWork.CandidateRepository.GetFirstOrDefaultAsync(q => q.Id == jobs.CandidateId, true);
+            var candidate = await _unitOfWork.CandidateRepository.GetFirstOrDefaultAsync(q => q.Id == candidateId, true);
             var candidateUser = candidate.User;
-            if (candidate != null && jobs.JobIds.Count > 0)
+            if (candidate != null && applicationIds.Length > 0)
             {
-                var candidateJob = await _unitOfWork.CandidateRepository.AddJobs(candidate.Id, jobs.JobIds);
+                var candidateJob = await _unitOfWork.CandidateRepository.AddJobs(candidate.Id, applicationIds.ToList());
 
                 if (candidateJob > 0)
                 {
-                    foreach (var id in jobs.JobIds)
+                    foreach (var id in applicationIds)
                     {
                         var job = await _unitOfWork.JobRepository.GetByIdAsync(id);
                         status = true;
