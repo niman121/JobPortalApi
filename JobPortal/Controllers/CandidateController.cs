@@ -11,11 +11,12 @@ using System.Runtime.InteropServices.WindowsRuntime;
 using System.Threading.Tasks;
 using System.Web.Http;
 using HttpGetAttribute = System.Web.Http.HttpGetAttribute;
+using HttpPostAttribute = System.Web.Http.HttpPostAttribute;
 using RouteAttribute = System.Web.Http.RouteAttribute;
 
 namespace JobPortal.Controllers
 {
-    [Route("[controller]")]
+    [RoutePrefix("Candidate")]
     [Authorize(Roles = "Candidate")]
     [ApiController]
     public class CandidateController : ControllerBase
@@ -39,7 +40,7 @@ namespace JobPortal.Controllers
         }
 
         [Route("applyjobs")]
-        [System.Web.Http.HttpPost]
+        [HttpPost]
         [ValidateModel]
         public async Task<ServiceResult> ApplyToJobs(ApplyJobDTO jobs)
         {
