@@ -61,6 +61,7 @@ namespace JobPortal
             services.AddScoped<IJobPortalOtpRepository, JobPortalOtpRepository>();
             services.AddScoped<IOtpService, OptService>();
             services.AddScoped<IEmailService, EmailService>();
+            services.AddScoped<IJobPortalRoleRepository, JobPortalRolesRepository>();
 
             services.AddAuthentication(options =>
             {

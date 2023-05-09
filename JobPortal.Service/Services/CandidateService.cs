@@ -44,9 +44,10 @@ namespace JobPortal.Service.Services
         {
             bool status = false;
             var candidate = await _unitOfWork.CandidateRepository.GetFirstOrDefaultAsync(q => q.Id == candidateId, true);
-            var candidateUser = candidate.User;
+           
             if (candidate != null && applicationIds.Length > 0)
             {
+                var candidateUser = candidate.User;
                 var candidateJob = await _unitOfWork.CandidateRepository.AddJobs(candidate.Id, applicationIds.ToList());
 
                 if (candidateJob > 0)

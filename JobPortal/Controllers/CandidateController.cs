@@ -12,11 +12,11 @@ using System.Threading.Tasks;
 using System.Web.Http;
 using HttpGetAttribute = System.Web.Http.HttpGetAttribute;
 using HttpPostAttribute = System.Web.Http.HttpPostAttribute;
-using RouteAttribute = System.Web.Http.RouteAttribute;
+using RouteAttribute = Microsoft.AspNetCore.Mvc.RouteAttribute;
 
 namespace JobPortal.Controllers
 {
-    [RoutePrefix("candidate")]
+    [Route("candidate")]
     [Authorize]
     [ApiController]
     public class CandidateController : ControllerBase
@@ -31,7 +31,7 @@ namespace JobPortal.Controllers
         [Route("joblist")]
         [HttpGet]
         [AllowAnonymous]
-        public ServiceResult<IEnumerable<JobDTO>> GetJobLists(int from = 0, int to = 100)
+        public ServiceResult<IEnumerable<JobDTO>> GetJobLists([FromUri]int from = 0, [FromUri]int to = 100)
         {
             var result = new ServiceResult<IEnumerable<JobDTO>>();
             var jobs = _candidateService.GetAllJobs(from, to);
@@ -40,9 +40,10 @@ namespace JobPortal.Controllers
             return result;
         }
 
-        [Route("{candidateId}/jobs/{applicationIds}")]
+        [Route("{candidateId}/jobs/applications")]
         [HttpPost]
         [ValidateModel]
+        [AllowAnonymous]
         public async Task<ServiceResult> ApplyToJobs(int candidateId, int[] applicationIds)
         {
             var result = new ServiceResult();
@@ -55,13 +56,13 @@ namespace JobPortal.Controllers
             return result;
         }
 
-        [Route("appliedjobs")]
+        [Route("{candidateId}/appliedjobs")]
         [HttpGet]
         public async Task<ServiceResult<List<JobDTO>>> appliedjobs(int candidateId)
         {
             var result = new ServiceResult<List<JobDTO>>();
             var jobs = await _candidateService.AppliedJobs(candidateId);
-            if (jobs != null)
+            if (jobs.Count > 0)
             {
                 result.SetSuccess();
                 result.Data = jobs;
